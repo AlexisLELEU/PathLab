@@ -33,12 +33,8 @@ def createFolderDefault():
     createFolder('js')
     createFolder('styles')
     os.chdir(path + '/app/styles')
-    createFile('styles.scss', os.O_WRONLY | os.O_CREAT)
-    createFile('styles.css', os.O_RDWR | os.O_CREAT)
-
-    sty = os.open('styles.css', os.O_RDWR | os.O_CREAT)
-    os.write(sty,'@charset "UTF-8";')
-    os.close(sty)
+    # createFile('styles.scss', os.O_WRONLY | os.O_CREAT)
+    # createFile('styles.css', os.O_RDWR | os.O_CREAT)
 
     os.chdir(path + '/app/js')
     createFile('app.js', os.O_RDWR | os.O_CREAT)
@@ -48,6 +44,12 @@ def createFolderDefault():
     idx = os.open('index.html', os.O_RDWR | os.O_CREAT)
     os.write(idx,'<!DOCTYPE html>\n<html>\n  <head>\n    <meta charset="utf-8">\n    <link rel="stylesheet" href="styles/styles.css">\n    <title></title>\n  </head>\n  <body>\n\n\n  </body>\n</html>')
     os.close(idx)
+
+def editStyle(text):
+    css = os.open(text, os.O_RDWR | os.O_CREAT)
+    os.write(css,'@charset "UTF-8";\n\n\n* {\n   margin: 0;\n   padding: 0;\n}\n*,*:before,*:after {\n   box-sizing:border-box\n}')
+    os.close(css)
+
 
 
 print('\033[1;32;40m')
@@ -64,10 +66,14 @@ if start == '0':
         createFolderDefault()
         if sass == '0' :
             os.chdir(path + '/app/styles')
+            editStyle('styles.scss')
             os.system('sass --watch styles.scss:styles.css')
+
         else:
             os.chdir(path + '/app/styles')
             os.remove('styles.scss')
+            editStyle('styles.scss')
+
 
     else:
         errorStr('Folders already exist')
